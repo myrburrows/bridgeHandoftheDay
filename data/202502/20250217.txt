@@ -1,4 +1,4 @@
-1	Bidding: North 1	What is the HCP, distribution, LTC and "Bergen 20"	3, 3-3-2-5, 11.5, 11	hand1.png
+1	Bidding: North 1	What is the HCP, distribution, LTC and "Bergen 20"	3, 3-3-2-5, 10.5, 11	hand1.png
 2	Bidding: North 1	What should North bid to start (and continue, unless Partner forces)?	Pass	hand1.png
 1	Bidding: East 1	What is the HCP, distribution, LTC and "Bergen 20"	11, 3-5-2-3, 8, 19	hand1.png
 2	Bidding: East 1	What factors weigh toward East opening?	Good hearts, NV	hand1.png
