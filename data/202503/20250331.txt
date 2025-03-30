@@ -1,1 +1,10 @@
-1	3/31/2025	Sorry, no Hand of the Day today. You may try other dates by changing the date field.		RoadClosed.png
+1	3/31/2025	South deals. What should South open?	2C. South bids the artificial, strong opening (22+ HCP or 9+ playing tricks with no help from Partner).	20250331_1.png
+2	3/31/2025	Bidding: 2C. West will Pass. With 6 Clubs, West needs about 10 HCP to overcall 3C. How should North respond?	2D. Playing "steps", 2D shows 0-3 HCP. If playing "waiting", the same 2D shows "nothing special".	20250331_1.png
+3	3/31/2025	Bidding: 2C, P, 2D. East  will pass, needing 6+ Spades for 2S. What is the rebid from South?	2NT. South shows a balanced hand with 22-24 HCP -- too big for opening 2NT (20-21) and too small for 3NT (25+).	20250331_1.png
+4	3/31/2025	Bidding: 2C, P, 2D, P, 2NT, P. How should North rebid?	3C. This is Stayman, just as if Partner had opened 2NT. North is hoping to find a major suit fit and avoid a NT contract.	20250331_1.png
+5	3/31/2025	Bidding: 2C, P, 2D, P, 2NT, P, 3C, P. What should South say now?	3H. Partner asked for a 4-card major and South has it.	20250331_1.png
+6	3/31/2025	Bidding: 2C, P, 2D, P, 2NT, P, 3C, P, 3H, P. Should North go to game?	Yes, 4H. North already showed a max of 3 HCP, so South should not go further. With the singleton, North can re-evaluate to 5 points. With Partner's monster hand, she should have a shot.	20250331_1.png
+7	3/31/2025	All Pass. 4H in the South. What should West pick for the opening lead?	♣J. It's the obvious choice, top of an honor sequence.	20250331_1.png
+8	3/31/2025	After seeing the ♣J lead and Dummy, how should declarer plan the play?	South will lose a Spade and 2 trumps, even with a favorable 3-2 split. South needs to ruff 2 Clubs in Dummy. South plans to play 2 rounds of trump, and leave one high trump outstanding. Then, if there is an over-ruff, it is a trick the defense already has.	20250331_1.png
+9	3/31/2025	The first trick in Clubs goes J-2-K-A. What does declarer do next?	South will lead a small trump to exit. Whatever the defense does, South will soon be in to lead the ♥A. That leaves the high trump in E-W, but it can only win 1 trick. South can cross-ruff the black suits.	20250331_1.png
+10	3/31/2025	Does the contract make?	Yes, South will get 4 tricks with Hearts regardless of when E-W use that last trump.	20250331_1.png
