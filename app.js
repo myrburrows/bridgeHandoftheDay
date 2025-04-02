@@ -3,13 +3,12 @@ let data = [];
 let currentQuestionIndex = 0;
 let missedQuestions = [];
 let reviewingMissedQuestions = false;
-let reviewIndex = 0; // Separate index for reviewing missed questions
+let reviewIndex = 0;
 
-// Function to retrieve data file based on date
 function retrieveDataFile(date) {
     const [month, day, year] = date.split('/');
-    const yearMonth = `20${year}${month}`; // Assume 20XX for the year
-    const fileName = `data/${yearMonth}/${yearMonth}${day}.txt`; // Path: data/YYYYMM/YYYYMMDD.txt
+    const yearMonth = `20${year}${month}`;
+    const fileName = `data/${yearMonth}/${yearMonth}${day}.txt`;
 
     fetch(fileName)
         .then(response => {
@@ -22,22 +21,27 @@ function retrieveDataFile(date) {
             if (!text.trim()) {
                 throw new Error(`The data file for ${date} exists but is empty.`);
             }
-            // Parse the text file into data objects
-            data = text.split('\n').map(line => {
+            data = text.trim().split('\n').map((line, index) => {
                 const fields = line.split('\t');
-                const [key, category, question, answer, image] = fields;
-                return { key, category, question, answer, image: image ? image.trim() : null };
+                console.log(`Line ${index + 1}:`, line); // Log raw line
+                if (fields.length < 4) {
+                    console.warn("Malformed line:", line);
+                    return { key: "", category: "", question: line, answer: "", image: null };
+                }
+                const [key, category, question, answer, ...rest] = fields;
+                const image = rest.length > 0 ? rest.join('\t').trim() : null;
+                return { key, category, question, answer, image };
             });
 
-            currentQuestionIndex = 0; // Reset index for new data
-            missedQuestions = []; // Clear missed questions
-            reviewingMissedQuestions = false; // Reset review mode
-            document.getElementById('error-message').textContent = ''; // Clear any previous error
-            displayQuestion(); // Start displaying questions after data loads
+            currentQuestionIndex = 0;
+            missedQuestions = [];
+            reviewingMissedQuestions = false;
+            document.getElementById('error-message').textContent = '';
+            displayQuestion();
         })
         .catch(error => {
             console.error('Error loading data:', error);
-            document.getElementById('error-message').textContent = error.message; // Display error in reserved space
+            document.getElementById('error-message').textContent = error.message;
         });
 }
 
@@ -45,81 +49,73 @@ function retrieveDataFile(date) {
 const today = new Date();
 const smallerFormattedDate = today.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' });
 document.getElementById('date-input').value = smallerFormattedDate;
-retrieveDataFile(smallerFormattedDate); // Load data for today's date on app load
+retrieveDataFile(smallerFormattedDate);
 
-// Event listener for Enter key in the date input field
 document.getElementById('date-input').addEventListener('keypress', (event) => {
     if (event.key === 'Enter') {
         const enteredDate = document.getElementById('date-input').value.trim();
-
-        // Validate the format first
         const datePattern = /^\d{2}\/\d{2}\/\d{2}$/;
         if (!datePattern.test(enteredDate)) {
             document.getElementById('error-message').textContent = 'Invalid date format. Use MM/DD/YY.';
             return;
         }
 
-        // Parse and validate the actual date
         const [month, day, year] = enteredDate.split('/').map(Number);
-        const parsedDate = new Date(`20${year}`, month - 1, day); // Create a Date object
+        const parsedDate = new Date(`20${year}`, month - 1, day);
         if (
-            parsedDate.getFullYear() !== 2000 + year || // Ensure the year matches
-            parsedDate.getMonth() !== month - 1 || // Ensure the month matches
-            parsedDate.getDate() !== day // Ensure the day matches
+            parsedDate.getFullYear() !== 2000 + year ||
+            parsedDate.getMonth() !== month - 1 ||
+            parsedDate.getDate() !== day
         ) {
             document.getElementById('error-message').textContent = 'Invalid date. Please enter a real calendar date.';
             return;
         }
 
-        // Clear error message and retrieve data
         document.getElementById('error-message').textContent = '';
         retrieveDataFile(enteredDate);
     }
 });
 
-// Display the current question, category, and image
 function displayQuestion() {
     const currentQuestion = reviewingMissedQuestions ? missedQuestions[reviewIndex] : data[currentQuestionIndex];
+    console.log("Current Question:", currentQuestion);
     
-    document.getElementById("title").textContent = "Roger That:  Bridge Hand of the Day";
-    document.getElementById('category').textContent = currentQuestion.category;
-    document.getElementById('question').textContent = `${currentQuestion.key}. ${currentQuestion.question}`;
+    document.getElementById("title").textContent = "Roger That: Bridge Hand of the Day";
+    document.getElementById('category').textContent = currentQuestion.category || "";
+    // Escape HTML to debug raw string, then set innerHTML
+    const questionText = `${currentQuestion.key || ""}. ${currentQuestion.question || ""}`;
+    console.log("Question Text:", questionText);
+    document.getElementById('question').innerHTML = questionText;
+    document.getElementById('answer').innerHTML = currentQuestion.answer || "";
+    document.getElementById('answer').style.display = 'none';
 
-    // Reset the Show Answer button text and styles
     const showAnswerButton = document.getElementById('show-answer');
-    showAnswerButton.textContent = "Show Answer";
+    showAnswerButton.innerHTML = "Show Answer";
     showAnswerButton.disabled = false;
     showAnswerButton.style.backgroundColor = "#4caf50";
     showAnswerButton.style.color = "white";
 
-    document.getElementById('answer').textContent = currentQuestion.answer;
-    document.getElementById('answer').style.display = 'none'; // Hide answer initially
-
-    // Handle the image display
     const imageElement = document.getElementById('flashcard-image');
     if (currentQuestion.image) {
-        imageElement.src = `images/${currentQuestion.image}`; // Assuming images are in an "images" folder
-        imageElement.style.display = "block"; // Show the image
+        imageElement.src = `images/${currentQuestion.image}`;
+        imageElement.style.display = "block";
     } else {
-        imageElement.style.display = "none"; // Hide the image if no image is provided
+        imageElement.style.display = "none";
     }
 
-    // Show or hide buttons based on whether we are in review mode
     document.getElementById('response-buttons').style.display = reviewingMissedQuestions ? 'none' : 'block';
     document.getElementById('next-review').style.display = reviewingMissedQuestions ? 'block' : 'none';
     document.getElementById('review-button').style.display = 'none';
 }
 
-// Show the answer in the Show Answer button and change its style
 function showAnswer() {
     const showAnswerButton = document.getElementById('show-answer');
-    showAnswerButton.textContent = document.getElementById('answer').textContent; // Display answer in the button
-    showAnswerButton.disabled = true; // Disable the button once the answer is shown
-    showAnswerButton.style.backgroundColor = "white"; // Change to white background
-    showAnswerButton.style.color = "black"; // Change text to black
+    showAnswerButton.innerHTML = document.getElementById('answer').innerHTML || "No answer available";
+    showAnswerButton.disabled = true;
+    showAnswerButton.style.backgroundColor = "white";
+    showAnswerButton.style.color = "black";
 }
 
-// Record whether the answer was known or missed, then move to the next question
 function recordAnswer(knewIt) {
     if (!knewIt) {
         missedQuestions.push(data[currentQuestionIndex]);
@@ -127,59 +123,53 @@ function recordAnswer(knewIt) {
 
     currentQuestionIndex++;
 
-    // Check if we've finished the main set of questions
     if (currentQuestionIndex >= data.length) {
         if (missedQuestions.length > 0) {
-            document.getElementById('review-button').style.display = 'block'; // Show the review button if there are missed questions
-            document.getElementById('category').style.display = 'none'; // Hide question 25 and other elements
+            document.getElementById('review-button').style.display = 'block';
+            document.getElementById('category').style.display = 'none';
             document.getElementById('question').style.display = 'none';
             document.getElementById('response-buttons').style.display = 'none';
         } else {
-            showExerciseDone(); // Call to display the Exercise Done box if no missed questions
+            showExerciseDone();
         }
     } else {
         displayQuestion();
     }
 }
 
-// Navigate to the previous question
 function goToLastQuestion() {
     if (currentQuestionIndex > 0) {
-        currentQuestionIndex--; // Move to the previous question
-        displayQuestion(); // Update the display
+        currentQuestionIndex--;
+        displayQuestion();
     } else {
-        console.log('Already at the first question.'); // Optional: Log if at the first question
+        console.log('Already at the first question.');
     }
 }
 
-// Start reviewing missed questions
 function startReview() {
     reviewingMissedQuestions = true;
-    reviewIndex = 0; // Reset index to start at the first missed question
+    reviewIndex = 0;
     document.getElementById('category').style.display = 'block';
     document.getElementById('question').style.display = 'block';
     document.getElementById('response-buttons').style.display = 'none';
     document.getElementById('next-review').style.display = 'block';
-    document.getElementById('review-button').style.display = 'none'; // Hide the review button
+    document.getElementById('review-button').style.display = 'none';
     displayQuestion();
 }
 
-// Move to the next missed question in review mode
 function nextReviewQuestion() {
     reviewIndex++;
     if (reviewIndex >= missedQuestions.length) {
-        showExerciseDone(); // Call to show completion message with missed count
+        showExerciseDone();
     } else {
         displayQuestion();
     }
 }
 
-// Display an "Exercise Done" box with the number of review questions
 function showExerciseDone() {
-    document.getElementById('next-review').style.display = 'none'; // Hide Next button after review
+    document.getElementById('next-review').style.display = 'none';
     const flashcardDiv = document.querySelector('.flashcard');
 
-    // Create Exercise Done box
     const doneBox = document.createElement('div');
     doneBox.textContent = `Exercise Done! You had ${missedQuestions.length} review questions.`;
     doneBox.style.fontSize = "1.2em";
@@ -190,5 +180,5 @@ function showExerciseDone() {
     doneBox.style.backgroundColor = "#e0f7fa";
     doneBox.style.color = "#00796b";
     
-    flashcardDiv.appendChild(doneBox); // Append the message to the flashcard container
+    flashcardDiv.appendChild(doneBox);
 }
