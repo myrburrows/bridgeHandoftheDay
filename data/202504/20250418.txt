@@ -1,4 +1,4 @@
-Q1	4/18/2025	West deals. What should West open?	1C. West has the count to open, and no 4+-card major. Playing "standard" minors, 1D would promise 4 diamonds.  Her partner will understand that 1C only promises 3 clubs.	20250418_1.png
+Q1	4/18/2025	West deals. What should West open?	1C. West has the count to open, and no 5+-card major. Playing "standard" minors, 1D would promise 4 diamonds.  Her partner will understand that 1C only promises 3 clubs.	20250418_1.png
 Q2	4/18/2025	Bidding: 1C. Should North overcall?	No, pass. North does not have a 5+-card suit to bid. A 1S overcall here would promise 5 of them.	20250418_1.png
 Q3	4/18/2025	Bidding: 1C, P. How should East respond to 1C?	1H. East bids 1H to show 4+ of them, and 6+ HCP. The new suit is of course forcing on the opener. The hand could go a lot of different ways. East will see what West has to say on her rebid.	20250418_1.png
 Q4	4/18/2025	Bidding: 1C, P, 1H. South will pass. What should West do on her rebid?	2H. West has very nice hearts, but the hand is still a minimum. All those side-suits could be worth nothing at all.	20250418_1.png
